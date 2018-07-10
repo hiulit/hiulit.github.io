@@ -4,29 +4,22 @@ ajax.open("GET", "https://api.github.com/users/hiulit/repos", true)
 ajax.onload = function () {
     let data = JSON.parse(ajax.responseText)
     let projects = data.filter((item) => !item.fork)
-    let projectsTemplate = `
-    <h2>Projects</h2>
+    let forks = data.filter((item) => item.fork)
+    renderList('Projects', projects, '.js-projects-template')
+    renderList('Forks', forks, '.js-forks-template')
+}
+ajax.send()
+
+function renderList(title, array, selector) {
+    let template = `
+    <h2>${title}</h2>
     <ul>
-        ${projects.map(item =>
+        ${array.map(item =>
             `<li>
                 <a href="${item.html_url}">${item.name}</a>
             </li>`
         ).join('')}
     </ul>
     `
-    let forks = data.filter((item) => item.fork)
-    let forksTemplate = `
-        <h2>Forks</h2>
-        <ul>
-            ${forks.map(item =>
-            `<li>
-                <a href="${item.html_url}">${item.name}</a>
-            </li>`
-        ).join('')}
-        </ul>
-    `
-    if (projectsTemplate) document.querySelector('.js-projects-template').innerHTML = projectsTemplate
-    if (forksTemplate) document.querySelector('.js-forks-template').innerHTML = forksTemplate
+    document.querySelector(selector).innerHTML = template
 }
-ajax.send()
-
