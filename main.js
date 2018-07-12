@@ -1,6 +1,6 @@
 const ajax = new XMLHttpRequest()
 
-ajax.open("GET", "https://api.github.com/users/hiulit/repos", true)
+ajax.open("GET", "https://api.github.com/users/hiulit/repos?per_page=100", true)
 ajax.onload = function () {
     let data = JSON.parse(ajax.responseText)
     let projects = data.filter((item) => !item.fork)
